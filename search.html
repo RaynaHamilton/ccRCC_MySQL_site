@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Unit 08 - Biotest autocomplete</title>
+	<!--[if IE]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+    <link rel="stylesheet" type="text/css" href="css/search_product.css" />
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="js/search.js"></script>
+  <script type="text/javascript" src="js/autocomplete.js"></script>
+</head>
+
+<body id="main">
+
+<h2>410.712: Advanced Practical Computer Concepts for Bioinformatics <br>Unit 8 Homework - biotest Autocomplete<br>Rayna Hamilton <br>March 20, 2022</h2>
+    <form name="gene_search" id="gene_search" action="">
+        <input name="search_term" id = "search_term" type="search" value="" autofocus="autofocus" placeholder="Enter a search term"/>
+		<input name="submit" type="submit" id="submit" value="submit">
+		<div class="ui-widget">
+
+</div>
+        
+</form>
+<script>
+
+$("#search_term").on("input", function() {
+autosearch();});
+</script>
+<section id='results'>
+<br><br><br><br><br>
+	<p>
+		<span id='match_count'>0</span> match(es) found.
+	</p>
+	
+	<table>
+		<thead>
+		<tr>
+			<td>Locus tag</td>
+			<td>Product</td>
+		</tr>
+		</thead>
+		<tbody>
+			<!-- this will be filled in by javascript when there are results -->
+		</tbody>
+</section>
+
+</body>
+
+</html>
