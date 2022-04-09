@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link href="css/main.css" rel="stylesheet"
+type="text/css" />
+<title>Unit 06 form</title>
+<!--[if IE]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+</head>
+<body id="home">
+
+<h3>
+{{message}}
+</h3>
+<table>
+  <tr>
+    <th>Uniquename</th>
+    <th>Value</th>
+  </tr>
+  {% for uniquename, value in cursor %}
+  <tr>
+    <td>{{uniquename}}</td>
+    <td>{{value}}</td>
+  </tr>
+  {% endfor %}
+</table>
+<br>
+<a href="./search.html">Return to search</a>
+</body>
+</html>

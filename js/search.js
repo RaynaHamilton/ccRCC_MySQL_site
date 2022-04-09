@@ -15,7 +15,9 @@ function runSearch( term ) {
             processJSON(data);
 			$('.to_gene').click(function(e)
                 {
+					window.location.href='./search_genes.cgi';
                     alert(this.value);
+					    
                 });
         },
         error: function(jqXHR, textStatus, errorThrown){
