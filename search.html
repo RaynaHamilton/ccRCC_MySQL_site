@@ -31,6 +31,7 @@
 
 $("#search_term").on("input", function() {
 autosearch();});
+
 </script>
 <section id='results'>
 <br><br><br><br><br>
@@ -38,11 +39,12 @@ autosearch();});
 		<span id='match_count'>0</span> match(es) found.
 	</p>
 	
-	<table>
+	<table id="mytable">
 		<thead>
 		<tr>
 			<td>Locus tag</td>
 			<td>Product</td>
+			<td>Link</td>
 		</tr>
 		</thead>
 		<tbody>

@@ -13,6 +13,10 @@ function runSearch( term ) {
         data: frmStr,
         success: function(data, textStatus, jqXHR) {
             processJSON(data);
+			$('.to_gene').click(function(e)
+                {
+                    alert(this.value);
+                });
         },
         error: function(jqXHR, textStatus, errorThrown){
             alert("Failed to perform gene search! textStatus: (" + textStatus +
@@ -24,16 +28,29 @@ function runSearch( term ) {
 
 // this processes a passed JSON structure representing gene matches and draws it
 //  to the result table
+ function toGenePage(gene_id){
+    alert(gene_id)
+}
+
 function processJSON( data ) {
     // set the span that lists the match count
     $('#match_count').text( data.match_count );
     
     // this will be used to keep track of row identifiers
     var next_row_num = 1;
-    
+	
+   
     // iterate over each match and add a row to the result table for each
     $.each( data.matches, function(i, item) {
-        var this_row_id = 'result_row_' + next_row_num++;
+		 var tr = $("<tr />");
+                $.each(item, function (k, v) {
+                    tr.append($("<td />", { html: v }));
+                    
+                })
+				tr.append('<button class="to_gene" value='+item.locus_id+'>'+item.locus_id+'</button>');
+  
+					$("#mytable").append(tr);
+        /*var this_row_id = 'result_row_' + next_row_num++;
     
         // create a row and append it to the body of the table
         $('<tr/>', { "id" : this_row_id } ).appendTo('tbody');
@@ -43,7 +60,8 @@ function processJSON( data ) {
         
         // add the product column
         $('<td/>', { "text" : item.product } ).appendTo('#' + this_row_id);
-
+		$('<td/>', { html : item.product } ).appendTo('#' + this_row_id);*/
+		
     });
     
     // now show the result section that was previously hidden
@@ -60,4 +78,5 @@ $(document).ready( function() {
 		$( "#search_term" ).autocomplete({source:[""]});
         return false;  // prevents 'normal' form submission
     });
+	
 });
