@@ -1,4 +1,4 @@
-NA NA
+ go_names
 GO:0001558 regulation of cell growth
 GO:0001952 regulation of cell-matrix adhesion
 GO:0004714 transmembrane receptor protein tyrosine kinase activity
@@ -32,6 +32,7 @@ GO:0061302 smooth muscle cell-matrix adhesion
 GO:0061564 axon development
 GO:0070062 extracellular exosome
 GO:1990138 neuron projection extension
+NA NA
 GO:0003689 DNA clamp loader activity
 GO:0005634 nucleus
 GO:0005654 nucleoplasm
