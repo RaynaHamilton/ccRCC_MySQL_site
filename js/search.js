@@ -8,7 +8,7 @@ function runSearch( term ) {
     var frmStr = $('#gene_search').serialize();
     
     $.ajax({
-        url: './search_product.cgi',
+        url: './search_database.cgi',
         dataType: 'json',
         data: frmStr,
         success: function(data, textStatus, jqXHR) {
