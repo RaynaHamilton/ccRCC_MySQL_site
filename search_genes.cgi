@@ -3,41 +3,66 @@
 import jinja2
 import cgi
 import mysql.connector
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd 
+import seaborn as sns
+from search_genes import plot_probe
 
 def main():
+
 	templateLoader = jinja2.FileSystemLoader( searchpath='templates')
 	env = jinja2.Environment(loader=templateLoader)
-	template = env.get_template('unit06_results.html')
-    
-	form = cgi.FieldStorage()
-	product = form.getfirst('product')
+	template = env.get_template('gene_page.html')
 	print('Content-type: text/html\n')
-	
+	f = cgi.FieldStorage()
+	params = {}
+	for key in f.keys():
+	  params[key] = f[key].value
+	#print(template.render(symbol=params['dist']))
+	#if 'dist' not in params.keys():
+	#	f['dist']="NPTX2"
 	conn = mysql.connector.connect(user='rhamil32', password='@101@9+1z',
-	host='localhost', database='rhamil32_chado')
-	if product is None:
-		product=""
+	host='localhost', database='rhamil32')
 	curs = conn.cursor()
+	if 'symbol' not in params.keys() or 'name' not in params.keys():
+		params['symbol']="NPTX2"
+		params['name']="neuronal pentraxin 2"
 	#search featureprop.value for matching gene symbols or gene products, ignoring case:
-	qry = 'select feature.uniquename, featureprop.value from feature join featureprop on feature.feature_id=featureprop.feature_id join cvterm on featureprop.type_id=cvterm.cvterm_id where lower(featureprop.value) like %s and cvterm.name ="gene_product_name";'
-	curs.execute(qry, ("%"+product.lower()+"%",))
-	temp=[[uniquename.decode(),value.decode()] for (uniquename,value) in curs]
-	if len(temp)==0:
-		message=f"No results found matching the query string '{product}'.\nPlease try a more general search term."
-	else:
-		message=f"{len(temp)} results found matching the query string '{product}'."
-	print(template.render(cursor=temp,message=message))
+	qry = """select Probe.probe_id, Probe.p_value, Probe.fold_change from Gene join Probe on Gene.gene_symbol=Probe.gene_symbol	 where Gene.gene_symbol=%s and Gene.gene_name like %s;"""
+	name=params["name"].replace("_"," ")
+	curs.execute(qry, (params['symbol'],'%'+name+'%'))
+	probe_results=dict()
+	for probe_id,p_value,fold_change in curs:
+		probe_results[probe_id]=[p_value,fold_change,[],[]]
+	qry = """select Expression.sample_id, Expression.probe_id, Expression.value from Gene join Probe on Gene.gene_symbol=Probe.gene_symbol join Expression on Probe.probe_id=Expression.probe_id where Gene.gene_symbol=%s and Gene.gene_name like %s;
+		"""
+	#print(params['name'].replace("_"," "))
+	curs.execute(qry, (params['symbol'],'%'+name+'%'))
+	for sample_id,probe_id,value in curs:
+		if "normal" in sample_id:
+			probe_results[probe_id][2].append(value)
+		else:
+			probe_results[probe_id][3].append(value)
+	for probe in probe_results.keys():
+		probe_results[probe].append(np.mean(probe_results[probe][2]))
+		probe_results[probe].append(np.mean(probe_results[probe][3]))
+	#print(probe_results)
+	
+	message=f"{len(probe_results)} probe(s) found matching the specified gene name and symbol."
+	temp=[]
+	for probe in probe_results.keys():
+		temp.append([probe,probe_results[probe][4],probe_results[probe][5],probe_results[probe][1],probe_results[probe][0],'"http://bfx3.aap.jhu.edu/rhamil32/final_project/plots/'+probe+'.png"'])
+		plot_probe(probe_results,probe)
+	qry="""select Gene_ontology.go_term from Gene join Gene_ontology on Gene.gene_symbol=Gene_ontology.gene_symbol where Gene.gene_symbol=%s and Gene.gene_name like %s;"""
+	curs.execute(qry, (params['symbol'],'%'+params['name'].replace("_"," ")+'%'))
+	
+	terms=[go_term[0] for go_term in curs]
+	
+	print(template.render(cursor=temp,message=message,symbol=params["symbol"],name=name,go_terms=zip([term.replace(" ","_") for term in terms],terms)))
 	curs.close()
 	conn.close()
 
+
 if __name__ == '__main__':
 	main()
-
-
-
-
-
-
-
-
-

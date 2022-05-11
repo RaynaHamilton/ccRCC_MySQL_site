@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Unit 08 - Biotest autocomplete</title>
+	<title>Clear Cell Renal Cell Carcinoma: Microarray Expression Database</title>
 	<!--[if IE]>
 		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-    <link rel="stylesheet" type="text/css" href="css/search_product.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="/resources/demos/style.css">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
@@ -14,27 +14,40 @@
   <script type="text/javascript" src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
     <script type="text/javascript" src="js/search.js"></script>
   <script type="text/javascript" src="js/autocomplete.js"></script>
-</head>
 
-<body id="main">
-
-<h2>410.712: Advanced Practical Computer Concepts for Bioinformatics <br>Unit 8 Homework - biotest Autocomplete<br>Rayna Hamilton <br>March 20, 2022</h2>
-    <form name="gene_search" id="gene_search" action="">
-        <input name="search_term" id = "search_term" type="search" value="" autofocus="autofocus" placeholder="Enter a search term"/>
-		<input name="submit" type="submit" id="submit" value="submit">
-		<div class="ui-widget">
+<!--[if IE]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<div class="header">
+  <h1>Clear Cell Renal Cell Carcinoma: Microarray Expression Database</h1>
+  <h3>AS.410.712: Advanced Practical Computer Concepts for Bioinformatics<br>Final Project<br>Rayna Hamilton<br>May 14, 2022</h3>
+ <form name="gene_search" id="gene_search" action="">
+        <input name="search_term" id = "search_term" type="search" value="" autofocus="autofocus" placeholder="NPXT2"/>
+		<select name="search_type">
+		<option value="GO">GO term</option>
+		<option value="symbol">Gene symbol</option>
+		<option value="name">Gene name</option>
+		</select>
+		<input name="submit" type="submit" id="submit" value="submit">  
+</form>
 
 </div>
-        
-</form>
-<script>
-
-$("#search_term").on("input", function() {
-autosearch();});
-
+<script type="text/javascript" >
+(new URL(window.location.href)).searchParams.forEach((x, y) =>
+    document.getElementById(y).value = x.replaceAll("_"," "))
 </script>
+
+<div class="footer">
+  <p>Dataset sources: <br> von Roemeling, C. A., Radisky, D. C., Marlow, L. A., Cooper, S. J., Grebe, S. K., Anastasiadis, P. Z., Tun, H. W., & Copland, J. A. (2014). Neuronal Pentraxin 2 Supports Clear Cell Renal Cell Carcinoma by Activating the AMPA-Selective Glutamate Receptor-4. Cancer Research, 74(17), 4796–4810. https://doi.org/10.1158/0008-5472.can-14-0210  
+  <br> Feltes, B. C., Chandelier, E. B., Grisci, B. I., & Dorn, M. (2019). CuMiDa: An Extensively Curated Microarray Database for Benchmarking and Testing of Machine Learning Approaches in Cancer Research. Journal of Computational Biology, 26(4), 376–386. https://doi.org/10.1089/cmb.2018.0238
+ <br><br> Image source: <br>Schraml, P., Frew, I. J., Thoma, C. R., Boysen, G., Struckmann, K., Krek, W., & Moch, H. (2008). Sporadic clear cell renal cell carcinoma but not the papillary type is characterized by severely reduced frequency of primary cilia. Modern Pathology, 22(1), 31–36. https://doi.org/10.1038/modpathol.2008.132
+</p>
+</div>
+</head>
+
+
+<body>
 <section id='results'>
-<br><br><br><br><br>
 	<p>
 		<span id='match_count'>0</span> match(es) found.
 	</p>
@@ -42,9 +55,10 @@ autosearch();});
 	<table id="mytable">
 		<thead>
 		<tr>
-			<td>Locus tag</td>
-			<td>Product</td>
-			<td>Link</td>
+			<td>Gene symbol</td>
+			<td>Gene name</td>
+			<td>Gene Ontology term</td>
+			<td>Gene info page</td>
 		</tr>
 		</thead>
 		<tbody>

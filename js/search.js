@@ -15,8 +15,9 @@ function runSearch( term ) {
             processJSON(data);
 			$('.to_gene').click(function(e)
                 {
-					window.location.href='./search_genes.cgi';
-                    alert(this.value);
+					var symbol=this.value;
+					var name=this.id;
+					window.location.href="./search_genes.cgi?symbol="+symbol+"&name="+name;
 					    
                 });
         },
@@ -30,9 +31,6 @@ function runSearch( term ) {
 
 // this processes a passed JSON structure representing gene matches and draws it
 //  to the result table
- function toGenePage(gene_id){
-    alert(gene_id)
-}
 
 function processJSON( data ) {
     // set the span that lists the match count
@@ -49,21 +47,9 @@ function processJSON( data ) {
                     tr.append($("<td />", { html: v }));
                     
                 })
-				tr.append('<button class="to_gene" value='+item.locus_id+'>'+item.locus_id+'</button>');
+				tr.append('<button class="to_gene" value='+item.locus_id+' id='+item.product.split(' ').join('_')+'>'+item.locus_id+'</button>');
   
 					$("#mytable").append(tr);
-        /*var this_row_id = 'result_row_' + next_row_num++;
-    
-        // create a row and append it to the body of the table
-        $('<tr/>', { "id" : this_row_id } ).appendTo('tbody');
-        
-        // add the locus column
-        $('<td/>', { "text" : item.locus_id } ).appendTo('#' + this_row_id);
-        
-        // add the product column
-        $('<td/>', { "text" : item.product } ).appendTo('#' + this_row_id);
-		$('<td/>', { html : item.product } ).appendTo('#' + this_row_id);*/
-		
     });
     
     // now show the result section that was previously hidden
@@ -71,13 +57,12 @@ function processJSON( data ) {
 }
 
 
-
 // run our javascript once the page is ready
 $(document).ready( function() {
+
     // define what should happen when a user clicks submit on our search form
     $('#submit').click( function() {
         runSearch();
-		$( "#search_term" ).autocomplete({source:[""]});
         return false;  // prevents 'normal' form submission
     });
 	

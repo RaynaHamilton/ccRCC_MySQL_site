@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link href="css/main.css" rel="stylesheet"
+type="text/css" />
+<title>{{symbol}} Expression Page</title>
+<!--[if IE]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<div class="header">
+  <h1>Clear Cell Renal Cell Carcinoma: Microarray Expression Database</h1>
+  <h3>Gene name: {{name}} <br>Gene symbol: {{symbol}}</h3>
+
+</div>
+</head>
+<body>
+
+<div class="probes">
+<h3>
+<br><br><br><br>Click on the gene's associated GO terms below to search the database for this term.<br>
+{% for term,clean_term in go_terms %}
+<form action="http://bfx3.aap.jhu.edu/rhamil32/final_project/search.html" style="display: inline;">
+	<button name="search_term" value={{term}} type="submit">{{clean_term}}</button>
+</form>
+  {% endfor %}
+<br><br>
+{{message}}
+</h3>
+<table>
+  <tr>
+    <th>Probe ID</th>
+    <th>Normal Mean (log2 scale)</th>
+	<th>Renal Cell Carcinoma Mean (log2 scale)</th>
+	<th>Fold Change</th>
+	<th>P value</th>
+	<th>Expression Plot</th>
+  </tr>
+  {% for probe,normal_mean,cc_mean,fold_change,p_value,image in cursor %}
+  <tr>
+    <td>{{probe}}</td>
+    <td>{{normal_mean}}</td>
+	<td>{{cc_mean}}</td>
+	<td>{{fold_change}}</td>
+	<td>{{p_value}}</td>
+	<td> <img src={{image}} width="400" height="400"></td>
+  </tr>
+  {% endfor %}
+</table>
+</div>
+</div>
+<br>
+<a href="./search.html">Return to search</a>
+</body>
+
+</html>

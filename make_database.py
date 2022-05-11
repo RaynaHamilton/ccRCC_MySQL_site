@@ -6,13 +6,13 @@ import mysql.connector
 def main():
 	#try:
 	sample=dict()
-	probe=[]
+	probes=[]
 	expression=dict()
 	for i,line in enumerate(open("data/Renal_GSE53757.csv")):
 		temp=line.strip().split(",")
 		if len(temp)>0:
 			if i==0:
-				probe=temp[2:]
+				probes=temp[2:]
 			else:
 				expression[int(temp[0])]=[float(val) for val in temp[2:]]
 				sample[int(temp[0])]=temp[1]
@@ -28,8 +28,13 @@ def main():
 			else:
 				probes_to_genes[temp[0]].append(temp[1])
 			genes_to_names[temp[1]]=temp[2] #1-to-1 relationship between gene symbols and names
-			
-			
+	print(len(probes_to_genes))
+	print(len(genes_to_names))
+	probes_to_stats=dict()
+	for line in open("data/probes_to_stats.tsv"):
+		temp=line.strip().split("\t")
+		if len(temp)==3:
+			probes_to_stats[temp[0]]=[float(temp[1]),float(temp[2])]
 	genes_to_go=dict()
 	for line in open("data/genes_to_GO.tsv"):
 		temp=line.strip().split("\t")
@@ -45,6 +50,8 @@ def main():
 		temp=line.strip().split("\t")
 		if len(temp)==2:
 			go_to_names[temp[0]]=temp[1]
+	
+	
 			
 	#print(sample,probe,expression,probes_to_genes,genes_to_names,genes_to_go)
 	#print(probes_to_genes,genes_to_names,genes_to_go)
@@ -59,26 +66,26 @@ def main():
 	print(temp)
 	for table in temp:
 		curs.execute("drop table "+table+";")
-	tables={"Sample":"sample_id int not null, class varchar(6) not null","Gene":"gene_symbol varchar(10) not null, gene_name varchar(50) not null","Expression":"sample_id int not null, probe_id varchar(15) not null, value float not null","Probe":"probe_id varchar(15) not null, gene_symbol varchar(10) not null, p_value float not null, fold_change float not null","Gene_ontology":"gene_symbol varchar(10) not null, go_id char(10) not null","Ontology_term":"go_id char(10) not null, term varchar(200) not null"}
+	tables={"Gene":"gene_symbol varchar(10) not null, gene_name varchar(50) not null","Expression":"sample_id varchar(15) not null, probe_id varchar(15) not null, value float not null","Probe":"probe_id varchar(15) not null, gene_symbol varchar(10) not null, p_value float not null, fold_change float not null","Gene_ontology":"gene_symbol varchar(10) not null, go_term char(200) not null"}
 	for table,cols in tables.items():
 		qry="create table "+table+"("+cols+");"
 		print(qry)
 		curs.execute(qry)
-		
-	for sample_id,class_id in sample.items():
-		curs.execute("insert into Sample values (%s,%s);",(sample_id,class_id))
-		#curs.execute('select * from Sample;')
-		#print([value for value in curs])
 	for sample_id,value_list in expression.items():
 		for i,value in enumerate(value_list):
-			curs.execute("insert into Expression values (%s,%s,%s);",(sample_id,probe[i],value))
+			curs.execute("insert into Expression values (%s,%s,%s);",(str(sample_id)+"_"+sample[sample_id],probes[i],value))
+	for gene,go_id_list in genes_to_go.items():
+		for go_id in list(set(go_id_list)):
+			curs.execute("insert into Gene_ontology values (%s,%s);",(gene,go_to_names[go_id]))	
+	
+	for probe,gene_list in probes_to_genes.items():
+		for gene in gene_list:
+			curs.execute("insert into Probe values (%s,%s,%s,%s);",(probe,gene,probes_to_stats[probe][1],probes_to_stats[probe][0]))
+	
 	for symbol,name in genes_to_names.items():
 		curs.execute("insert into Gene values (%s,%s);",(symbol,name))
-	for gene,go_id_list in genes_to_go.items():
-		for go_id in go_id_list:
-			curs.execute("insert into Gene_ontology values (%s,%s);",(gene,go_id))
-	for go_id,go_term in go_to_names.items():
-		curs.execute("insert into Ontology_term values (%s,%s);",(go_id,go_term))
+	#for go_id,go_term in go_to_names.items():
+	#	curs.execute("insert into Ontology_term values (%s,%s);",(go_id,go_term))
 	conn.commit()
 	curs.close()
 	conn.close()
