@@ -67,13 +67,20 @@ change_results<-cbind(fc,t_results)
 change_results<-data.frame(change_results)
 colnames(change_results)<-c("fold_change","p_value")
 rownames(change_results)<-probes
-#just for fun, a volcano plot
-plot(change_results)
+#just for fun, a volcano plot (looks a bit strange with the Bonferroni correction, but it's best to match the numbers which will be in the database)
+plot(change_results,main="Volcano plot of Clear Cell Renal Cell Carcinoma Microarray",xlab="log2(fold change)",ylab="Bonferroni p-value")
 points(change_results[abs(change_results$fold_change)>=2 & change_results$p_value<=0.05,],col="purple")
 points(change_results[rownames(change_results)=="213479_at",],col="red",pch=19)#sanity check - this is the probe id of NPTX2,
 #which the paper focused on.  It has a fold change of 4.3x and a p value of 9.67e-14 (with Bonferroni!) in my 
 #analysis - overall very significant and the second-largest positive fold change
-
+lines(c(-2,-2),c(0,1),lty="dotted")
+lines(c(2,2),c(0,1),lty="dotted")
+lines(c(-6,6),c(0.05,0.05),lty="dotted")
 
 write.table(change_results,file="../data/probes_to_stats.tsv",quote=F,sep="\t",col.names=F)
 
+sig_probes<-change_results[abs(change_results$fold_change)>=2 & change_results$p_value<=0.05,]
+sig_genes<-genes[genes$PROBEID %in% rownames(sig_probes),c("PROBEID","GENENAME")]
+sig_probes<-cbind(sig_genes,sig_probes[sig_genes$PROBEID,])
+write.table(sig_probes$PROBEID,"../data/GO_enrichment_input.txt",row.names=F,quote=F)
+write.table(sig_probes[order(sig_probes$p_value),],"../data/significant_genes.txt",quote=F,row.names=F,sep="\t")
