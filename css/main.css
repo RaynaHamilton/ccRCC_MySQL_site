@@ -10,6 +10,7 @@ body {
 	margin: auto;
 	text-align: center;
 	padding-bottom: 100px;
+	padding-top:100px;
 }
 .header, .footer{
 	background: #000d1a;
@@ -37,7 +38,7 @@ a{
 
 section#results {
     display: none;
-	padding-top:120px;
+	padding-top:80px;
 	padding-bottom:100px;
 }
 

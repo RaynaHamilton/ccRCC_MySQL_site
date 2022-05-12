@@ -59,7 +59,8 @@ function processJSON( data ) {
 
 // run our javascript once the page is ready
 $(document).ready( function() {
-
+(new URL(window.location.href)).searchParams.forEach((x, y) =>
+    document.getElementById(y).value = x.replaceAll("_"," "));
     // define what should happen when a user clicks submit on our search form
     $('#submit').click( function() {
         runSearch();

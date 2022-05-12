@@ -19,7 +19,7 @@ type="text/css" />
 
 <div id="probes">
 <h3>
-<br><br><br><br>Click on the gene's associated GO terms below to search the database for this term.<br>
+Click on the gene's associated GO terms below to search the database for this term.<br>
 {% for term,clean_term in go_terms %}
 <form action="http://bfx3.aap.jhu.edu/rhamil32/final_project/search.html" style="display: inline;">
 	<button name="search_term" value={{term}} type="submit">{{clean_term}}</button>

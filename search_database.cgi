@@ -35,7 +35,7 @@ def main():
 				FROM Gene_ontology inner join Gene
 				ON Gene_ontology.gene_symbol=Gene.gene_symbol
 			   WHERE go_term LIKE %s
-			   ORDER BY go_term, Gene.gene_symbol
+			   ORDER BY Gene.gene_symbol,go_term;
 		"""
 	cursor.execute(qry, ('%' + term + '%', ))
 	gene_symbol,gene_name=None,None
