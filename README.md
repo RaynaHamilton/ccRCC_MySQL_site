@@ -4,7 +4,7 @@ The search page is located at http://bfx3.aap.jhu.edu/rhamil32/final_project/sea
 
 ### Usage
 1. On the main search page (search.html), enter a search term and specify in a dropdown menu whether it refers to a gene name, gene symbol or gene ontology term.  
-2. Click submit.  Querying the database can take a few seconds, so please by patient.
+2. Click submit.  
 3. Browse the search results, which are sorted alphabetically by gene symbol.
 4. Click on any button located on the right side of the results table to be taken to a unique gene page.  This page contains fold change and p-value results as well as violinplots comparing normal and carcinoma expression for each probe associated with the gene.  
 5. If desired, click on any gene ontology term associated with the gene to be returned to the search page with this term filled in, so that genes involved in related processes can be investigated.
